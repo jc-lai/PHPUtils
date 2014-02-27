@@ -1,0 +1,33 @@
+<?php
+/* JSON_Collection View
+ *
+ * Expects a variable '$results' to contain an array to be formated
+ *
+ **/
+
+
+/* Get the last 'index' string from the array,
+ * helps to figure out the last item.
+ */
+
+function get_last_key(&$array){
+    end($array);                                 // Move 'pointer' to last item of the array
+    return key($array);                          // Return the 'index' from the item being pointed out
+}
+
+$size = sizeof($results);                        // How many items do we need to render
+echo '[';                                        // Each item goes inside the array
+for($i=0; $i<$size; $i++){
+    $item = $results[$i];                        // Retreive a single row
+    echo '{';                                    // Build the row as a JSON Object
+    $last_field = get_last_key($item);           // Determine the last field (so there no comma)
+    foreach( $item as $field_name => $value ){   // For each fields (name of the field and its value)
+        echo '"'.$field_name.'":"'.$value.'"';   // Build the key / value pair for the object
+        if( $field_name != $last_field ){ 
+            echo ',';}                           // Each fields in the object need a comma except the last one    
+    }
+    echo '}';                                    // Close the object
+    if( $i < $size-1 ){ echo ','; }              // Each object in the array needs a comma exept the last one
+}
+echo ']';                                        // Close the array
+?>
